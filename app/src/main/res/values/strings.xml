@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Weather Alert</string>
+    <string name="title_activity_add_location">AddLocation</string>
 </resources>
