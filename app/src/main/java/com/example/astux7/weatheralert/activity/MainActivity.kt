@@ -1,24 +1,48 @@
 package com.example.astux7.weatheralert.activity
 
 import android.content.Intent
-import android.location.Location
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import com.example.astux7.weatheralert.R
 import com.example.astux7.weatheralert.data.ForecastDatabaseHandler
+import com.example.astux7.weatheralert.data.LocationListAdapter
+import com.example.astux7.weatheralert.model.Location
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    private var adapter: LocationListAdapter? = null
+    private var favLocationList: ArrayList<Location>? = null
+    private var layoutManager: RecyclerView.LayoutManager? = null
     var dbHandler: ForecastDatabaseHandler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        dbHandler = ForecastDatabaseHandler(this)
 
+        favLocationList = ArrayList<Location>()
+        layoutManager = LinearLayoutManager(this)
+        adapter = LocationListAdapter(favLocationList!!, this)
+
+        // set up list
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = adapter
+
+        // load data
+        // dbHandler = ForecastDatabaseHandler(this)
         //var favLocation: ArrayList<Location> = dbHandler!!.readLocation()
+        val cityList = listOf<String>( "New York", "Leeds", "Vilnius", "Kaunas", "Sofia", "London")
+        for (i in 0..5) {
+            val loc = Location()
+            loc.name = cityList[i]
+            favLocationList!!.add(loc)
+        }
+        adapter!!.notifyDataSetChanged()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
