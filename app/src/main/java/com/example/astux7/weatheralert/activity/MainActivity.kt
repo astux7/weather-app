@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.example.astux7.weatheralert.R
 import com.example.astux7.weatheralert.data.ForecastDatabaseHandler
 import com.example.astux7.weatheralert.data.LocationListAdapter
@@ -14,35 +15,37 @@ import com.example.astux7.weatheralert.model.Location
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    var dbHandler: ForecastDatabaseHandler? = null
     private var adapter: LocationListAdapter? = null
     private var favLocationList: ArrayList<Location>? = null
+    private var getFavLocationList: ArrayList<Location>? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
-    var dbHandler: ForecastDatabaseHandler? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        dbHandler = ForecastDatabaseHandler(this)
         favLocationList = ArrayList<Location>()
         layoutManager = LinearLayoutManager(this)
         adapter = LocationListAdapter(favLocationList!!, this)
-
         // set up list
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
 
-        // load data
-        // dbHandler = ForecastDatabaseHandler(this)
-        //var favLocation: ArrayList<Location> = dbHandler!!.readLocation()
-        val cityList = listOf<String>( "New York", "Leeds", "Vilnius", "Kaunas", "Sofia", "London")
-        for (i in 0..5) {
-            val loc = Location()
-            loc.name = cityList[i]
-            favLocationList!!.add(loc)
+        if(dbHandler!!.getLocationCount() > 0) {
+            // load locations
+            getFavLocationList = dbHandler!!.readLocations()
+            for(item in getFavLocationList!!.iterator()) {
+                val location = Location()
+                location.id = item.id
+                location.name = item.name
+                favLocationList!!.add(location)
+            }
+            adapter!!.notifyDataSetChanged()
+        } else {
+            startActivity(Intent(this, AddLocation::class.java ))
         }
-        adapter!!.notifyDataSetChanged()
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

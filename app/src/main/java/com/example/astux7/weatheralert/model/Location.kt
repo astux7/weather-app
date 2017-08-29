@@ -7,8 +7,8 @@ class Location() {
     var id: Int? = null
     var name: String? = null
 
-//    constructor( name: String) : this() {
-//    //    this.id = id
+//    constructor(id: Int, name: String) : this() {
+//        this.id = id
 //        this.name = name
 //    }
 

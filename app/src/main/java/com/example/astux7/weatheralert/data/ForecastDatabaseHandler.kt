@@ -26,6 +26,7 @@ class ForecastDatabaseHandler(context: Context):
     fun createLocation(location: Location) {
         var db: SQLiteDatabase = writableDatabase
         var values :ContentValues = ContentValues()
+
         values.put(KEY_NAME, location.name)
         db.insert(TABLE_NAME, null, values)
         db.close()
@@ -36,17 +37,35 @@ class ForecastDatabaseHandler(context: Context):
         var cursor: Cursor = db.query(TABLE_NAME, arrayOf(KEY_ID, KEY_NAME),
                                         KEY_ID + "=?", arrayOf(id.toString()),
                                         null, null, null, null)
-        var location = Location()
         if(cursor != null)
             cursor.moveToFirst()
+
+        var location = Location()
         location.id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
         location.name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
         return location
     }
 
+    fun readLocations(): ArrayList<Location> {
+        var db: SQLiteDatabase = writableDatabase
+        var list: ArrayList<Location> = ArrayList()
+        var selectAll = "SELECT * FROM " + TABLE_NAME
+        var cursor: Cursor = db.rawQuery(selectAll, null)
+
+        if(cursor.moveToFirst()) {
+            do {
+                var location = Location()
+                location.id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
+                location.name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
+                list.add(location)
+            } while (cursor.moveToNext())
+        }
+        return list
+    }
+
     fun deleteLocation(location: Location) {
         var db: SQLiteDatabase = writableDatabase
-        //db.delete(TABLE_NAME, KEY_ID + "?=", arrayOf(location.id.toString()))
+        db.delete(TABLE_NAME, KEY_ID + "?=", arrayOf(location.id.toString()))
         db.close()
     }
 
