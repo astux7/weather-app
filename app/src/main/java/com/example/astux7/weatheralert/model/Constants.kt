@@ -1,0 +1,12 @@
+package com.example.astux7.weatheralert.model
+
+/**
+ * Created by astux7 on 25/08/2017.
+ */
+
+val DATABASE_VERSION: Int = 1
+val DATABASE_NAME: String = "forecast.db"
+val TABLE_NAME: String = "location"
+
+val KEY_ID: String = "id"
+val KEY_NAME: String = "name"

@@ -9,7 +9,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:attr/floatingToolbarDividerColor"
         android:orientation="vertical">
 
         <TextView
@@ -17,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="3pt"
-            android:background="?android:attr/colorButtonNormal"
+            android:background="@color/grey"
             android:text="24th of April"
             android:textAlignment="center"
             android:textColor="@android:color/background_dark"

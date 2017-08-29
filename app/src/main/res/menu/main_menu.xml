@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/add_location"
+        android:id="@+id/buAddLocation"
         android:icon="@drawable/ic_add_location_black_24dp"
         android:title="Add location"
         app:showAsAction="always" />
