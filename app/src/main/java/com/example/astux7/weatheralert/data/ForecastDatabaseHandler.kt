@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.widget.Toast
 import com.example.astux7.weatheralert.model.*
 
 /**
@@ -32,22 +33,22 @@ class ForecastDatabaseHandler(context: Context):
         db.close()
     }
 
-    fun readLocation(id: Int): Location {
-        var db: SQLiteDatabase = writableDatabase
-        var cursor: Cursor = db.query(TABLE_NAME, arrayOf(KEY_ID, KEY_NAME),
-                                        KEY_ID + "=?", arrayOf(id.toString()),
-                                        null, null, null, null)
-        if(cursor != null)
-            cursor.moveToFirst()
-
-        var location = Location()
-        location.id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
-        location.name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
-        return location
-    }
+//    fun readLocation(id: Int): Location {
+//        var db: SQLiteDatabase = readableDatabase
+//        var cursor: Cursor = db.query(TABLE_NAME, arrayOf(KEY_ID, KEY_NAME),
+//                                        KEY_ID + "=?", arrayOf(id.toString()),
+//                                        null, null, null, null)
+//        if(cursor != null)
+//            cursor.moveToFirst()
+//
+//        var location = Location()
+//        location.id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
+//        location.name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
+//        return location
+//    }
 
     fun readLocations(): ArrayList<Location> {
-        var db: SQLiteDatabase = writableDatabase
+        var db: SQLiteDatabase = readableDatabase
         var list: ArrayList<Location> = ArrayList()
         var selectAll = "SELECT * FROM " + TABLE_NAME
         var cursor: Cursor = db.rawQuery(selectAll, null)
@@ -63,9 +64,9 @@ class ForecastDatabaseHandler(context: Context):
         return list
     }
 
-    fun deleteLocation(location: Location) {
+    fun deleteLocation(id: Int) {
         var db: SQLiteDatabase = writableDatabase
-        db.delete(TABLE_NAME, KEY_ID + "?=", arrayOf(location.id.toString()))
+        db.delete(TABLE_NAME, KEY_ID + "=?", arrayOf(id.toString()))
         db.close()
     }
 

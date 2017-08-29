@@ -27,6 +27,7 @@ class AddLocation : AppCompatActivity() {
                 Toast.makeText(this,"Saved", Toast.LENGTH_LONG).show()
                 saveToDb(location!!)
                 startActivity(Intent(this, MainActivity::class.java))
+                finish()
             }
             else {
                 Toast.makeText(this,"Please enter location", Toast.LENGTH_LONG).show()

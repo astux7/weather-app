@@ -52,9 +52,9 @@ class LocationListAdapter(private val list: ArrayList<Location>,
 
             when(v!!.id) {
                 deleteButton.id -> {
-                    Toast.makeText(itemContext, "I deleted this location", Toast.LENGTH_LONG).show()
                     deleteLocation(favLocation.id!!)
                     itemList.removeAt(adapterPosition)
+                    Toast.makeText(itemContext, favLocation.name + " deleted", Toast.LENGTH_LONG).show()
                     notifyItemRemoved(adapterPosition)
                 }
             }
@@ -62,8 +62,7 @@ class LocationListAdapter(private val list: ArrayList<Location>,
 
         fun deleteLocation(id: Int) {
             var db: ForecastDatabaseHandler = ForecastDatabaseHandler(itemContext)
-
-            //db.deleteLocation(id)
+            db.deleteLocation(id)
         }
     }
 }
