@@ -39,7 +39,7 @@ class ForecastDatabaseHandler(context: Context):
         var location = Location()
         if(cursor != null)
             cursor.moveToFirst()
-
+        location.id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
         location.name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
         return location
     }

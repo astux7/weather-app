@@ -9,16 +9,35 @@
     android:padding="2pt">
 
 
-    <TextView
-        android:id="@+id/tvLocationItem"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="3pt"
         android:background="@color/grey"
-        android:text="Leeds"
-        android:textAlignment="center"
-        android:textColor="@android:color/background_dark"
-        android:textSize="18sp" />
+        android:orientation="horizontal"
+        android:padding="3pt">
+
+        <TextView
+            android:id="@+id/tvLocationItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Leeds"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_dark"
+            android:textSize="18sp" />
+
+
+        <Button
+            android:id="@+id/deleteButton"
+            android:layout_width="42dp"
+            android:layout_height="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/ic_delete_black_24dp"
+            android:foregroundGravity="center_vertical|center" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
