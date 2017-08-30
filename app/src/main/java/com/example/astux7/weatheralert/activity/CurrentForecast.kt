@@ -1,12 +1,8 @@
 package com.example.astux7.weatheralert.activity
 
 import android.content.Intent
-import android.icu.text.SimpleDateFormat
-import android.icu.util.Calendar
-import android.icu.util.TimeZone
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -16,14 +12,11 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.astux7.weatheralert.R
 import com.example.astux7.weatheralert.data.ForecastDatabaseHandler
-import com.example.astux7.weatheralert.data.LocationListAdapter
 import com.example.astux7.weatheralert.model.FORECAST_API
 import com.example.astux7.weatheralert.model.FORECAST_KEY
 import com.example.astux7.weatheralert.model.Location
 import com.example.astux7.weatheralert.model.WindForecast
-import kotlinx.android.synthetic.main.activity_add_location.*
 import kotlinx.android.synthetic.main.activity_current_forecast.*
-import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -84,7 +77,7 @@ class CurrentForecast : AppCompatActivity() {
 //                                error.message + location.name,
 //                                Toast.LENGTH_LONG).show()
 
-                        // startActivity(Intent(this, AddLocation::class.java))
+                        startActivity(Intent(this, AddLocation::class.java))
                     }catch (e: JSONException) { e.printStackTrace() }
                 }
         )
