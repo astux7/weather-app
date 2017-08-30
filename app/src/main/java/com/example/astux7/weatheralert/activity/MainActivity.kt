@@ -7,17 +7,17 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.example.astux7.weatheralert.R
 import com.example.astux7.weatheralert.data.ForecastDatabaseHandler
 import com.example.astux7.weatheralert.data.LocationListAdapter
 import com.example.astux7.weatheralert.model.Location
+import com.example.astux7.weatheralert.model.WindForecast
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     var dbHandler: ForecastDatabaseHandler? = null
     private var adapter: LocationListAdapter? = null
-    private var favLocationList: ArrayList<Location>? = null
+    private var favLocationList: ArrayList<WindForecast>? = null
     private var getFavLocationList: ArrayList<Location>? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
 
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         dbHandler = ForecastDatabaseHandler(this)
-        favLocationList = ArrayList<Location>()
+        favLocationList = ArrayList<WindForecast>()
         layoutManager = LinearLayoutManager(this)
         adapter = LocationListAdapter(favLocationList!!, this)
         // set up list
@@ -34,13 +34,16 @@ class MainActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
 
         if(dbHandler!!.getLocationCount() > 0) {
-            // load locations
+            // load locations - and weather
             getFavLocationList = dbHandler!!.readLocations()
             for(item in getFavLocationList!!.iterator()) {
                 val location = Location()
                 location.id = item.id
                 location.name = item.name
-                favLocationList!!.add(location)
+                val forecast = WindForecast(location, "40mph", "350deg"   )
+
+                //TODO implement service fore wind
+                favLocationList!!.add(forecast)
             }
             adapter!!.notifyDataSetChanged()
         } else {

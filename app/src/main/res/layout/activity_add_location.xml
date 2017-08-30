@@ -37,10 +37,10 @@
         android:id="@+id/saveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="272dp"
-        android:text="Save"
+        android:layout_marginTop="20dp"
+        android:text="GET FORECAST"
+        app:layout_constraintHorizontal_bias="0.852"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etLocation"
-        app:layout_constraintHorizontal_bias="0.86" />
+        app:layout_constraintTop_toBottomOf="@+id/etLocation" />
 </android.support.constraint.ConstraintLayout>
