@@ -33,20 +33,6 @@ class ForecastDatabaseHandler(context: Context):
         db.close()
     }
 
-//    fun readLocation(id: Int): Location {
-//        var db: SQLiteDatabase = readableDatabase
-//        var cursor: Cursor = db.query(TABLE_NAME, arrayOf(KEY_ID, KEY_NAME),
-//                                        KEY_ID + "=?", arrayOf(id.toString()),
-//                                        null, null, null, null)
-//        if(cursor != null)
-//            cursor.moveToFirst()
-//
-//        var location = Location()
-//        location.id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
-//        location.name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
-//        return location
-//    }
-
     fun readLocations(): ArrayList<Location> {
         var db: SQLiteDatabase = readableDatabase
         var list: ArrayList<Location> = ArrayList()
