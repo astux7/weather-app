@@ -5,9 +5,9 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -29,66 +29,65 @@ class MainActivity : AppCompatActivity() {
     var dbHandler: ForecastDatabaseHandler? = null
     var volleyRequest: RequestQueue? = null
     private var adapter: LocationListAdapter? = null
-    private var favLocationList: ArrayList<WindForecast>? = null
-    private var getFavLocationList: ArrayList<Location>? = null
+    private var windForecastList: ArrayList<WindForecast>? = null
+    private var favLocationList: ArrayList<Location>? = null
     private var layoutManager: RecyclerView.LayoutManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        loadFavLocationForecast()
+    }
+
+    private fun loadFavLocationForecast() {
         // DB data
         dbHandler = ForecastDatabaseHandler(this)
-        // JSON data
-        volleyRequest = Volley.newRequestQueue(this)
-
-        favLocationList = ArrayList<WindForecast>()
-        layoutManager = LinearLayoutManager(this)
-        adapter = LocationListAdapter(favLocationList!!, this)
-        // set up list
-        recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = adapter
-
         if(dbHandler!!.getLocationCount() > 0) {
             // load locations - and weather
-            getFavLocationList = dbHandler!!.readLocations()
-            for(item in getFavLocationList!!.iterator()) {
-                val location = Location()
-                location.id = item.id
-                location.name = item.name
-
-                getForecast(location, adapter!!)
-                //TODO implement service fore wind
-                // val forecast = WindForecast(location, "40mph", "350deg"   )
-               // favLocationList!!.add(forecast)
+            favLocationList = dbHandler!!.readLocations()
+            for(location in favLocationList!!.iterator()) {
+                getForecast(location)
             }
-           // adapter!!.notifyDataSetChanged()
         } else {
             startActivity(Intent(this, AddLocation::class.java ))
         }
     }
 
-    fun getForecast(location: Location, adapter: LocationListAdapter) {
+    private fun getForecast(location: Location) {
+        // JSON data
+        volleyRequest = Volley.newRequestQueue(this)
+        windForecastList = ArrayList<WindForecast>()
+        layoutManager = LinearLayoutManager(this)
+        adapter = LocationListAdapter(windForecastList!!, this)
+        // set up list
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = adapter
         val url = FORECAST_API + location.name +  "&appid=" + FORECAST_KEY
         val forecastRequest = JsonObjectRequest(Request.Method.GET, url,
                 Response.Listener {
                     response: JSONObject ->
                     try {
-                        val result = response.getJSONObject("wind")
-                        val speed = result["speed"].toString()
-                        val direction = result["deg"].toString()
+                        val speed = response.getJSONObject("wind")["speed"].toString()
+                        val direction = response.getJSONObject("wind")["deg"].toString()
                         val forecast = WindForecast(location, speed, direction)
-                        favLocationList!!.add(forecast)
+                        windForecastList!!.add(forecast)
                         adapter!!.notifyDataSetChanged()
                     }catch (e: JSONException) { e.printStackTrace() }
                 },
                 Response.ErrorListener {
                     error: VolleyError ->
                     try {
-                        Log.d( "Error", error.toString())
+                        Toast.makeText(null,
+                                error.message + location.name,
+                                Toast.LENGTH_LONG).show()
+
+                       // startActivity(Intent(this, AddLocation::class.java))
                     }catch (e: JSONException) { e.printStackTrace() }
                 }
         )
         volleyRequest!!.add(forecastRequest)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -101,8 +100,7 @@ class MainActivity : AppCompatActivity() {
         if(item != null) {
             when (item.itemId) {
                 R.id.buAddLocation -> {
-                    var intent = Intent(this, AddLocation::class.java)
-                    startActivity(intent)
+                    startActivity(Intent(this, AddLocation::class.java))
                 }
             }
         }

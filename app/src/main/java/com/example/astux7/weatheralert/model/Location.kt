@@ -6,4 +6,9 @@ package com.example.astux7.weatheralert.model
 class Location() {
     var id: Int? = null
     var name: String? = null
+
+    constructor(id: Int, name: String): this() {
+        this.id = id
+        this.name = name
+    }
 }

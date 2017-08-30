@@ -1,12 +1,14 @@
 package com.example.astux7.weatheralert.data
 
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.astux7.weatheralert.R
+import com.example.astux7.weatheralert.activity.AddLocation
 import com.example.astux7.weatheralert.model.Location
 import com.example.astux7.weatheralert.model.WindForecast
 
@@ -51,15 +53,18 @@ class LocationListAdapter(private val list: ArrayList<WindForecast>,
 
         override fun onClick(v: View?) {
             var itemPosition: Int = adapterPosition
-            val forecastLocation = itemList[itemPosition]
-            var favLocation = forecastLocation.location
+            var favLocation = itemList[itemPosition].location
 
             when(v!!.id) {
                 deleteButton.id -> {
                     deleteLocation(favLocation!!.id!!)
                     itemList.removeAt(adapterPosition)
-                    Toast.makeText(itemContext, favLocation!!.name + " deleted", Toast.LENGTH_LONG).show()
-                    notifyItemRemoved(adapterPosition)
+                    if(list.size > 0) {
+                        Toast.makeText(itemContext, favLocation!!.name + " deleted", Toast.LENGTH_LONG).show()
+                        notifyItemRemoved(adapterPosition)
+                    }else { // do not show empty list
+                        context.startActivity(Intent(context, AddLocation::class.java))
+                    }
                 }
             }
         }

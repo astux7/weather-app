@@ -41,10 +41,9 @@ class ForecastDatabaseHandler(context: Context):
 
         if(cursor.moveToFirst()) {
             do {
-                var location = Location()
-                location.id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
-                location.name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
-                list.add(location)
+                val id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
+                val name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
+                list.add(Location(id, name))
             } while (cursor.moveToNext())
         }
         return list

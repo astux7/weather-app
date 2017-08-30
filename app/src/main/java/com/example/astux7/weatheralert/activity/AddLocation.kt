@@ -20,7 +20,7 @@ class AddLocation : AppCompatActivity() {
 
         dbHandler = ForecastDatabaseHandler(this)
 
-        saveButton.setOnClickListener {
+        getForecastButton.setOnClickListener {
             if(!TextUtils.isEmpty(etLocation.text.toString())){
                 location = Location()
                 location!!.name = etLocation.text.toString()
