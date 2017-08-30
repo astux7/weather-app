@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.*
 import com.example.astux7.weatheralert.R
 import com.example.astux7.weatheralert.activity.AddLocation
-import com.example.astux7.weatheralert.model.Location
 import com.example.astux7.weatheralert.model.WindForecast
 
 /**
@@ -34,43 +33,41 @@ class LocationListAdapter(private val list: ArrayList<WindForecast>,
 
     // get the actual item when it is created from onCreateView
     inner class ViewHolder(itemView: View, context: Context, list: ArrayList<WindForecast>) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-        var itemContext = context
-        var itemList = list
-        var location: Location? = null
-        var favLocation = itemView.findViewById<TextView>(R.id.tvLocationItem) as TextView
-        var todayWindSpeed = itemView.findViewById<TextView>(R.id.tvTodaySpeed) as TextView
-        var todayWindDir = itemView.findViewById<TextView>(R.id.tvTodayDirection) as TextView
-        var deleteButton = itemView.findViewById<Button>(R.id.deleteButton) as Button
+        private val itemContext = context
+        private val itemList = list
+        private val favLocation = itemView.findViewById<TextView>(R.id.tvLocationItem) as TextView
+        private val todayWindSpeed = itemView.findViewById<TextView>(R.id.tvTodaySpeed) as TextView
+        private val todayWindDir = itemView.findViewById<TextView>(R.id.tvTodayDirection) as TextView
+        private val deleteButton = itemView.findViewById<Button>(R.id.deleteButton) as Button
 
         fun bindItem(forecast: WindForecast){
-            location = forecast.location
-            favLocation.text = location!!.name
-            todayWindSpeed.text = forecast.speed
-            todayWindDir.text = forecast.direction
-            //register button
-            deleteButton.setOnClickListener(this)
+            favLocation.text = forecast.location!!.city
+            todayWindSpeed.text = forecast.formatSpeed()
+            todayWindDir.text = forecast.formatDirection()
+
+            deleteButton.setOnClickListener(this) //register button
         }
 
-        override fun onClick(v: View?) {
-            var itemPosition: Int = adapterPosition
-            var favLocation = itemList[itemPosition].location
+        override fun onClick(view: View?) {
+            val itemPosition: Int = adapterPosition
+            val favLocation = itemList[itemPosition].location
 
-            when(v!!.id) {
+            when(view!!.id) {
                 deleteButton.id -> {
                     deleteLocation(favLocation!!.id!!)
                     itemList.removeAt(adapterPosition)
                     if(list.size > 0) {
-                        Toast.makeText(itemContext, favLocation!!.name + " deleted", Toast.LENGTH_LONG).show()
+                        Toast.makeText(itemContext, favLocation.city + " deleted", Toast.LENGTH_LONG).show()
                         notifyItemRemoved(adapterPosition)
-                    }else { // do not show empty list
+                    } else {
                         context.startActivity(Intent(context, AddLocation::class.java))
                     }
                 }
             }
         }
 
-        protected fun deleteLocation(id: Int) {
-            var db: ForecastDatabaseHandler = ForecastDatabaseHandler(itemContext)
+        private fun deleteLocation(id: Int) {
+            val db = LocationDatabaseHandler(itemContext)
             db.deleteLocation(id)
         }
     }

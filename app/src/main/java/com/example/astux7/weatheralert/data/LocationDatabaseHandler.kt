@@ -5,17 +5,17 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.widget.Toast
 import com.example.astux7.weatheralert.model.*
 
 /**
  * Created by astux7 on 25/08/2017.
  */
-class ForecastDatabaseHandler(context: Context):
+
+class LocationDatabaseHandler(context: Context):
         SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     override fun onCreate(db: SQLiteDatabase?) {
-        var CREATE_LOCATION_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + KEY_ID + " INTEGER PRIMARY KEY," +
-                                    KEY_NAME + " TEXT)"
+        val CREATE_LOCATION_TABLE = "CREATE TABLE " + TABLE_NAME + "(" +
+                KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT)"
         db?.execSQL(CREATE_LOCATION_TABLE)
     }
 
@@ -25,42 +25,42 @@ class ForecastDatabaseHandler(context: Context):
     }
 
     fun createLocation(location: Location) {
-        var db: SQLiteDatabase = writableDatabase
-        var values :ContentValues = ContentValues()
+        val db: SQLiteDatabase = writableDatabase
+        val values :ContentValues = ContentValues()
 
-        values.put(KEY_NAME, location.name)
+        values.put(KEY_NAME, location.city)
         db.insert(TABLE_NAME, null, values)
         db.close()
     }
 
     fun readLocations(): ArrayList<Location> {
-        var db: SQLiteDatabase = readableDatabase
-        var list: ArrayList<Location> = ArrayList()
-        var selectAll = "SELECT * FROM " + TABLE_NAME
-        var cursor: Cursor = db.rawQuery(selectAll, null)
-
-        if(cursor.moveToFirst()) {
+        val db: SQLiteDatabase = readableDatabase
+        val list: ArrayList<Location> = ArrayList()
+        val selectAll = "SELECT * FROM " + TABLE_NAME
+        val cursor: Cursor = db.rawQuery(selectAll, null)
+        if (cursor.moveToFirst()) {
             do {
                 val id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
                 val name = cursor.getString(cursor.getColumnIndex(KEY_NAME))
                 list.add(Location(id, name))
             } while (cursor.moveToNext())
         }
+        cursor.close()
         return list
     }
 
     fun deleteLocation(id: Int) {
-        var db: SQLiteDatabase = writableDatabase
+        val db: SQLiteDatabase = writableDatabase
         db.delete(TABLE_NAME, KEY_ID + "=?", arrayOf(id.toString()))
         db.close()
     }
 
     fun getLocationCount(): Int {
-        var db: SQLiteDatabase = readableDatabase
-        var countQuery: String = "SELECT * FROM " + TABLE_NAME
-        var cursor: Cursor = db.rawQuery(countQuery, null)
-
-        return cursor.count
+        val db: SQLiteDatabase = readableDatabase
+        val countQuery: String = "SELECT * FROM " + TABLE_NAME
+        val cursor: Cursor = db.rawQuery(countQuery, null)
+        val listCount = cursor.count
+        cursor.close()
+        return listCount
     }
-
 }

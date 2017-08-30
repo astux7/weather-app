@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -15,7 +14,7 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.astux7.weatheralert.R
-import com.example.astux7.weatheralert.data.ForecastDatabaseHandler
+import com.example.astux7.weatheralert.data.LocationDatabaseHandler
 import com.example.astux7.weatheralert.data.LocationListAdapter
 import com.example.astux7.weatheralert.model.FORECAST_API
 import com.example.astux7.weatheralert.model.FORECAST_KEY
@@ -25,8 +24,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONException
 import org.json.JSONObject
 
-class MainActivity : AppCompatActivity() {
-    var dbHandler: ForecastDatabaseHandler? = null
+class FavLocations : AppCompatActivity() {
+    var dbHandler: LocationDatabaseHandler? = null
     var volleyRequest: RequestQueue? = null
     private var adapter: LocationListAdapter? = null
     private var windForecastList: ArrayList<WindForecast>? = null
@@ -41,8 +40,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadFavLocationForecast() {
-        // DB data
-        dbHandler = ForecastDatabaseHandler(this)
+        dbHandler = LocationDatabaseHandler(this)
         if(dbHandler!!.getLocationCount() > 0) {
             // load locations - and weather
             favLocationList = dbHandler!!.readLocations()
@@ -63,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         // set up list
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
-        val url = FORECAST_API + location.name +  "&appid=" + FORECAST_KEY
+        val url = FORECAST_API + location.city +  "&appid=" + FORECAST_KEY
         val forecastRequest = JsonObjectRequest(Request.Method.GET, url,
                 Response.Listener {
                     response: JSONObject ->
