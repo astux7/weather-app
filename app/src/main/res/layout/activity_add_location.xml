@@ -12,6 +12,7 @@
         android:layout_width="242dp"
         android:layout_height="36dp"
         android:layout_marginTop="28dp"
+        android:gravity="center"
         android:text="Enter location i.e. London, LS122NH"
         android:textSize="14sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -23,23 +24,20 @@
         android:id="@+id/etLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
-        android:hint="Enter location"
-        android:inputType="textPersonName"
         android:textAlignment="center"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <Button
         android:id="@+id/saveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:text="GET FORECAST"
-        app:layout_constraintHorizontal_bias="0.852"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etLocation" />

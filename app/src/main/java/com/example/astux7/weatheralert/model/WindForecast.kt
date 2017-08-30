@@ -10,7 +10,7 @@ class WindForecast {
 
     constructor(location: Location, speed: String, direction: String) {
         this.location = location
-        this.speed = speed
-        this.direction = direction
+        this.speed = speed + " mph"
+        this.direction = direction + " deg"
     }
 }

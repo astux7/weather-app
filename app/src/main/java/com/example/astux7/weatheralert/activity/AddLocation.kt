@@ -25,7 +25,7 @@ class AddLocation : AppCompatActivity() {
                 location = Location()
                 location!!.name = etLocation.text.toString()
                 saveToDb(location!!)
-                Toast.makeText(this,"Saved", Toast.LENGTH_LONG).show()
+                Toast.makeText(this,location!!.name + " saved", Toast.LENGTH_LONG).show()
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
