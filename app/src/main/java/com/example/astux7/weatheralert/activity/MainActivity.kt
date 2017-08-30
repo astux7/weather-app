@@ -78,9 +78,9 @@ class MainActivity : AppCompatActivity() {
                 Response.ErrorListener {
                     error: VolleyError ->
                     try {
-                        Toast.makeText(null,
-                                error.message + location.name,
-                                Toast.LENGTH_LONG).show()
+//                        Toast.makeText(null,
+//                                error.message + location.name,
+//                                Toast.LENGTH_LONG).show()
 
                        // startActivity(Intent(this, AddLocation::class.java))
                     }catch (e: JSONException) { e.printStackTrace() }
