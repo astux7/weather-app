@@ -59,7 +59,7 @@
             android:layout_weight="1"
             android:autoText="false"
             android:gravity="center_vertical"
-            android:text="30 mph"
+            android:text="30 m/s"
             android:textAlignment="center"
             android:textSize="18sp" />
 
@@ -76,7 +76,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center_vertical"
-            android:text="SW"
+            android:text="180 deg"
             android:textAlignment="center"
             android:textSize="18sp" />
     </LinearLayout>

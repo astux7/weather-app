@@ -11,7 +11,9 @@ import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.astux7.weatheralert.R
-import com.example.astux7.weatheralert.data.ForecastDatabaseHandler
+
+import com.example.astux7.weatheralert.data.LocationDatabaseHandler
+
 import com.example.astux7.weatheralert.model.FORECAST_API
 import com.example.astux7.weatheralert.model.FORECAST_KEY
 import com.example.astux7.weatheralert.model.Location
@@ -23,7 +25,7 @@ import org.json.JSONObject
 
 
 class CurrentForecast : AppCompatActivity() {
-    var dbHandler: ForecastDatabaseHandler? = null
+    var dbHandler: LocationDatabaseHandler? = null
     var location: Location? = null
     var windForecast: WindForecast? = null
     var volleyRequest: RequestQueue? = null
@@ -31,33 +33,32 @@ class CurrentForecast : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_current_forecast)
         location = Location()
-        var name = intent.extras!!.get("Location")
-        location!!.name = name.toString()
+        val city = intent.extras!!.get("Location")
+        location!!.city = city.toString()
         getForecast(location!!)
 
         buttonAddToFav.setOnClickListener {
-            dbHandler = ForecastDatabaseHandler(this)
+            dbHandler = LocationDatabaseHandler(this)
             saveToDb(location!!)
-            Toast.makeText(this, location!!.name + " saved", Toast.LENGTH_LONG).show()
-            startActivity(Intent(this, MainActivity::class.java))
+            Toast.makeText(this, location!!.city + " saved", Toast.LENGTH_LONG).show()
+            startActivity(Intent(this, FavLocations::class.java))
             finish()
         }
 
         backButton.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, FavLocations::class.java))
             finish()
         }
     }
 
-
-    fun saveToDb(location: Location){
+    private fun saveToDb(location: Location){
         dbHandler!!.createLocation(location)
     }
 
     private fun getForecast(location: Location) {
         // JSON data
         volleyRequest = Volley.newRequestQueue(this)
-        val url = FORECAST_API + location.name +  "&appid=" + FORECAST_KEY
+        val url = FORECAST_API + location.city +  "&appid=" + FORECAST_KEY
         val forecastRequest = JsonObjectRequest(Request.Method.GET, url,
                 Response.Listener {
                     response: JSONObject ->
@@ -65,13 +66,13 @@ class CurrentForecast : AppCompatActivity() {
                         val speed = response.getJSONObject("wind")["speed"].toString()
                         val direction = response.getJSONObject("wind")["deg"].toString()
                         windForecast = WindForecast(location, speed, direction)
-                        tvLocationName.text = windForecast!!.location!!.name
-                        tvSpeed.text = windForecast!!.speed.toString()
-                        tvDirection.text = windForecast!!.direction.toString()
+                        tvLocationName.text = windForecast!!.location!!.city
+                        tvSpeed.text = windForecast!!.formatSpeed()
+                        tvDirection.text = windForecast!!.formatDirection()
                     }catch (e: JSONException) { e.printStackTrace() }
                 },
                 Response.ErrorListener {
-                    error: VolleyError ->
+                    _: VolleyError ->
                     try {
 //                        Toast.makeText(null,
 //                                error.message + location.name,

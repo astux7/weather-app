@@ -15,9 +15,10 @@ class AddLocation : AppCompatActivity() {
         setContentView(R.layout.activity_add_location)
 
         getForecastButton.setOnClickListener {
-            if(!TextUtils.isEmpty(etLocation.text.toString())){
-                var intent = Intent(this, CurrentForecast::class.java)
-                intent.putExtra("Location", etLocation.text.toString())
+            val city = etLocation.text.toString()
+            if(!TextUtils.isEmpty(city)){
+                val intent = Intent(this, CurrentForecast::class.java)
+                intent.putExtra("Location", city)
                 startActivity(intent)
                 finish()
             }
