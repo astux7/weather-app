@@ -13,13 +13,13 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ForecastNetworkClient(val context:Context) {
     val apiKey = FORECAST_KEY
 
-    fun getForecastByCity(location: Location): Call<WeatherForecast> {
+    fun getForecastBy(city: String): Call<WeatherForecast> {
         val network = Retrofit.Builder()
                 .baseUrl(FORECAST_CITY_API)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
         val forecastService = network.create(ForecastService::class.java)
-        val forecast = forecastService.forecastByLocation("imperial", location.city.toString(), apiKey)
+        val forecast = forecastService.forecastByLocation("imperial", city, apiKey)
         return forecast
     }
 }
