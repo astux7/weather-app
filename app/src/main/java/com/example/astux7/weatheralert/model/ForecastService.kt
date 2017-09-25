@@ -8,5 +8,7 @@ import retrofit2.http.Query
  */
 interface ForecastService {
     @GET("data/2.5/weather")
-    fun forecastByLocation(@Query("units") units: String, @Query("q") location: String, @Query("APPID") apiKey: String): retrofit2.Call<WeatherForecast>
+    fun forecastByLocation(@Query("units") units: String,
+                           @Query("q") location: String,
+                           @Query("APPID") apiKey: String): retrofit2.Call<WeatherForecast>
 }

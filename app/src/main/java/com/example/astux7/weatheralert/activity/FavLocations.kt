@@ -7,22 +7,16 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
-import com.android.volley.Request
+import android.widget.Toast
 import com.android.volley.RequestQueue
-import com.android.volley.Response
-import com.android.volley.VolleyError
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.example.astux7.weatheralert.R
+import com.example.astux7.weatheralert.data.ForecastNetworkClient
 import com.example.astux7.weatheralert.data.LocationDatabaseHandler
 import com.example.astux7.weatheralert.data.LocationListAdapter
-import com.example.astux7.weatheralert.model.FORECAST_API
-import com.example.astux7.weatheralert.model.FORECAST_KEY
-import com.example.astux7.weatheralert.model.Location
-import com.example.astux7.weatheralert.model.WindForecast
+import com.example.astux7.weatheralert.model.*
 import kotlinx.android.synthetic.main.activity_main.*
-import org.json.JSONException
-import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
 
 class FavLocations : AppCompatActivity() {
     var dbHandler: LocationDatabaseHandler? = null
@@ -53,39 +47,37 @@ class FavLocations : AppCompatActivity() {
     }
 
     private fun getForecast(location: Location) {
-        // JSON data
-        volleyRequest = Volley.newRequestQueue(this)
+        val network = ForecastNetworkClient(applicationContext)
+        val call = network.getForecastBy(location.city!!)
+
         windForecastList = ArrayList<WindForecast>()
         layoutManager = LinearLayoutManager(this)
         adapter = LocationListAdapter(windForecastList!!, this)
         // set up list
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = adapter
-        val url = FORECAST_API + location.city +  "&appid=" + FORECAST_KEY
-        val forecastRequest = JsonObjectRequest(Request.Method.GET, url,
-                Response.Listener {
-                    response: JSONObject ->
-                    try {
-                        val speed = response.getJSONObject("wind")["speed"].toString()
-                        val direction = response.getJSONObject("wind")["deg"].toString()
-                        val forecast = WindForecast(location, speed, direction)
-                        windForecastList!!.add(forecast)
-                        adapter!!.notifyDataSetChanged()
-                    }catch (e: JSONException) { e.printStackTrace() }
-                },
-                Response.ErrorListener {
-                    error: VolleyError ->
-                    try {
-//                        Toast.makeText(null,
-//                                error.message + location.name,
-//                                Toast.LENGTH_LONG).show()
 
-                       // startActivity(Intent(this, AddLocation::class.java))
-                    }catch (e: JSONException) { e.printStackTrace() }
+        call.enqueue(object: Callback<WeatherForecast> {
+            override fun onResponse(call: Call<WeatherForecast>?,
+                                    response: retrofit2.Response<WeatherForecast>?) {
+                if(response != null) {
+                    val windForecast: WeatherForecast = response.body()!!
+                    val wind = windForecast.wind
+                    val direction = wind.deg.toString()
+                    val speed = wind.speed.toString()
+
+                    windForecastList!!.add(WindForecast(location, speed!!, direction!!))
+                    adapter!!.notifyDataSetChanged()
                 }
-        )
-        volleyRequest!!.add(forecastRequest)
+            }
 
+            override fun onFailure(call: Call<WeatherForecast>?, t: Throwable?) {
+                Toast.makeText(null, "Problem getting forecast for " + location.city,
+                        Toast.LENGTH_LONG).show()
+                t?.printStackTrace()
+            }
+
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

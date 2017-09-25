@@ -13,6 +13,7 @@ import retrofit2.Call
 import retrofit2.Callback
 
 
+
 class CurrentForecast : AppCompatActivity() {
     var dbHandler: LocationDatabaseHandler? = null
     var location: Location? = null
@@ -52,10 +53,18 @@ class CurrentForecast : AppCompatActivity() {
             override fun onResponse(call: Call<WeatherForecast>?,
                                     response: retrofit2.Response<WeatherForecast>?) {
                 if(response != null) {
-                    val windForecast: WeatherForecast = response.body()!!
-                    val wind = windForecast.wind
-                    presentData(wind, city)
+                    try {
+                        val windForecast: WeatherForecast = response.body()!!
+                        val wind = windForecast.wind
+                        presentData(wind, city)
+                    } catch(e: Exception){
+                        Toast.makeText(null, "Problem getting forecast for " + city,
+                                Toast.LENGTH_LONG).show()
+//                        val intent = Intent(applicationContext, AddLocation::class.java)
+//                        context?.startActivity(intent)
+                    }
                 }
+
             }
 
             override fun onFailure(call: Call<WeatherForecast>?, t: Throwable?) {
