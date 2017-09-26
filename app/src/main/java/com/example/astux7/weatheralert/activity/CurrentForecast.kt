@@ -21,9 +21,9 @@ class CurrentForecast : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_current_forecast)
+        getSupportActionBar()?.setTitle(R.string.current_forecast_title);
 
         val city: String = intent.extras!!.get("Location").toString()
-
 
         getForecastFor(city)
 

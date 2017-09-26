@@ -11,6 +11,8 @@ import kotlinx.android.synthetic.main.activity_add_location.*
 class AddLocation : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        getSupportActionBar()?.setTitle(R.string.add_location_title);
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_location)
 

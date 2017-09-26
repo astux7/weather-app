@@ -29,6 +29,7 @@ class FavLocations : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        getSupportActionBar()?.setTitle(R.string.fav_list_title);
 
         loadFavLocationForecast()
     }
