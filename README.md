@@ -5,7 +5,7 @@ Weather app
 - Retrofit for JSON load
 - SqLite for location storage
 - data class
-
+- ProgressDialog which is depricated (need to look for replacement)
 
 
 ### Testing

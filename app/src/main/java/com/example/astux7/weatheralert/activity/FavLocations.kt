@@ -1,8 +1,10 @@
 package com.example.astux7.weatheralert.activity
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
@@ -18,6 +20,7 @@ import retrofit2.Callback
 
 class FavLocations : AppCompatActivity() {
     var dbHandler: LocationDatabaseHandler? = null
+    val handler = Handler()
     private var adapter: LocationListAdapter? = null
     private var windForecastList: ArrayList<WindForecast>? = null
     private var favLocationList: ArrayList<Location>? = null
@@ -31,6 +34,10 @@ class FavLocations : AppCompatActivity() {
     }
 
     private fun loadFavLocationForecast() {
+        // TODO replace depricate dialog
+        val dialog= ProgressDialog(this)
+        dialog.setMessage("Please wait...")
+        dialog.show()
         dbHandler = LocationDatabaseHandler(this)
         if(dbHandler!!.getLocationCount() > 0) {
             // load locations - and weather
@@ -38,6 +45,7 @@ class FavLocations : AppCompatActivity() {
             for(location in favLocationList!!.iterator()) {
                 getForecast(location)
             }
+            handler.postDelayed(Runnable { dialog.dismiss() }, 500)
         } else {
             startActivity(Intent(this, AddLocation::class.java ))
         }
