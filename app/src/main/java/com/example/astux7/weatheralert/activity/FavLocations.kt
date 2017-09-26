@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.example.astux7.weatheralert.R
 import com.example.astux7.weatheralert.data.ForecastNetworkClient
 import com.example.astux7.weatheralert.data.LocationDatabaseHandler
@@ -76,8 +77,11 @@ class FavLocations : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<WeatherForecast>?, t: Throwable?) {
-                //Toast.makeText(null, "Problem getting forecast ..", Toast.LENGTH_LONG).show()
-                t?.printStackTrace()
+                Toast.makeText(applicationContext, "Problem getting forecast for city ",
+                        Toast.LENGTH_LONG).show()
+                val intent = Intent(applicationContext, AddLocation::class.java)
+                startActivity(intent)
+               // t?.printStackTrace()
             }
 
         })

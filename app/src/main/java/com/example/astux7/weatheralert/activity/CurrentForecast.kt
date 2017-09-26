@@ -52,12 +52,14 @@ class CurrentForecast : AppCompatActivity() {
     }
 
     private fun getForecastFor(city: String) {
-        val network = ForecastNetworkClient(applicationContext)
-        val call = network.getForecastBy(city)
+
         // TODO replace deprecated dialog
         val dialog= ProgressDialog(this)
         dialog.setMessage("Please wait")
         dialog.show()
+
+        val network = ForecastNetworkClient(applicationContext)
+        val call = network.getForecastBy(city)
 
         call.enqueue(object: Callback<WeatherForecast> {
             override fun onResponse(call: Call<WeatherForecast>?,
@@ -69,19 +71,21 @@ class CurrentForecast : AppCompatActivity() {
                         presentData(wind, city)
                         handler.postDelayed(Runnable { dialog.dismiss() }, 500)
                     } catch(e: Exception){
-                        Toast.makeText(null, "Problem getting forecast for " + city,
+                        Toast.makeText(applicationContext, "Problem getting forecast for city ",
                                 Toast.LENGTH_LONG).show()
-//                        val intent = Intent(applicationContext, AddLocation::class.java)
-//                        context?.startActivity(intent)
+                        val intent = Intent(applicationContext, AddLocation::class.java)
+                        startActivity(intent)
                     }
                 }
 
             }
 
             override fun onFailure(call: Call<WeatherForecast>?, t: Throwable?) {
-                Toast.makeText(null, "Problem getting forecast for " + city,
+                Toast.makeText(applicationContext, "Problem getting forecast for city",
                         Toast.LENGTH_LONG).show()
-                t?.printStackTrace()
+                // t?.printStackTrace()
+                val intent = Intent(applicationContext, AddLocation::class.java)
+                startActivity(intent)
             }
 
         })
