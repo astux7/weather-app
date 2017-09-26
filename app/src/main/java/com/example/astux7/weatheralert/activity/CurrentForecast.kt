@@ -24,7 +24,6 @@ class CurrentForecast : AppCompatActivity() {
         getSupportActionBar()?.setTitle(R.string.current_forecast_title);
 
         val city: String = intent.extras!!.get("Location").toString()
-
         getForecastFor(city)
 
         buttonAddToFav.setOnClickListener {
@@ -55,7 +54,7 @@ class CurrentForecast : AppCompatActivity() {
     private fun getForecastFor(city: String) {
         val network = ForecastNetworkClient(applicationContext)
         val call = network.getForecastBy(city)
-        // TODO replace depricate dialog
+        // TODO replace deprecated dialog
         val dialog= ProgressDialog(this)
         dialog.setMessage("Please wait")
         dialog.show()

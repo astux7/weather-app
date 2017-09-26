@@ -35,7 +35,7 @@ class FavLocations : AppCompatActivity() {
     }
 
     private fun loadFavLocationForecast() {
-        // TODO replace depricate dialog
+        // TODO replace deprecated dialog
         val dialog= ProgressDialog(this)
         dialog.setMessage("Please wait...")
         dialog.show()
