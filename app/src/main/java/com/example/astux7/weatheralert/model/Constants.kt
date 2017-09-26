@@ -13,3 +13,5 @@ val KEY_NAME: String = "name"
 
 val FORECAST_KEY: String = "4bbca0d42acc4641b2c51d42ca0cd963"
 val FORECAST_CITY_API: String = "http://api.openweathermap.org/"
+
+val DEGREE  = "\u00b0"

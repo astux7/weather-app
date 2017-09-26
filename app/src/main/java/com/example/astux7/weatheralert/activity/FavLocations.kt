@@ -7,8 +7,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-import com.android.volley.RequestQueue
 import com.example.astux7.weatheralert.R
 import com.example.astux7.weatheralert.data.ForecastNetworkClient
 import com.example.astux7.weatheralert.data.LocationDatabaseHandler
@@ -20,7 +18,6 @@ import retrofit2.Callback
 
 class FavLocations : AppCompatActivity() {
     var dbHandler: LocationDatabaseHandler? = null
-    var volleyRequest: RequestQueue? = null
     private var adapter: LocationListAdapter? = null
     private var windForecastList: ArrayList<WindForecast>? = null
     private var favLocationList: ArrayList<Location>? = null
@@ -63,17 +60,14 @@ class FavLocations : AppCompatActivity() {
                 if(response != null) {
                     val windForecast: WeatherForecast = response.body()!!
                     val wind = windForecast.wind
-                    val direction = wind.deg.toString()
-                    val speed = wind.speed.toString()
 
-                    windForecastList!!.add(WindForecast(location, speed!!, direction!!))
+                    windForecastList!!.add(WindForecast(location, wind.speed, wind.deg))
                     adapter!!.notifyDataSetChanged()
                 }
             }
 
             override fun onFailure(call: Call<WeatherForecast>?, t: Throwable?) {
-                Toast.makeText(null, "Problem getting forecast for " + location.city,
-                        Toast.LENGTH_LONG).show()
+                //Toast.makeText(null, "Problem getting forecast ..", Toast.LENGTH_LONG).show()
                 t?.printStackTrace()
             }
 
@@ -91,6 +85,7 @@ class FavLocations : AppCompatActivity() {
             when (item.itemId) {
                 R.id.buAddLocation -> {
                     startActivity(Intent(this, AddLocation::class.java))
+                    finish()
                 }
             }
         }

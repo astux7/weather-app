@@ -16,15 +16,21 @@ class AddLocation : AppCompatActivity() {
 
         getForecastButton.setOnClickListener {
             val city = etLocation.text.toString()
+
             if(!TextUtils.isEmpty(city)){
-                val intent = Intent(this, CurrentForecast::class.java)
-                intent.putExtra("Location", city)
-                startActivity(intent)
-                finish()
+                goToCurrentForecastFor(city)
             }
             else {
-                Toast.makeText(this,"Please enter location", Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"Please enter location",
+                        Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun goToCurrentForecastFor(city: String){
+        val intent = Intent(this, CurrentForecast::class.java)
+        intent.putExtra("Location", city)
+        startActivity(intent)
+        finish()
     }
 }

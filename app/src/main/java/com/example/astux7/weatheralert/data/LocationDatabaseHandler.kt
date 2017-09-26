@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.astux7.weatheralert.model.*
+import java.util.*
 
 /**
  * Created by astux7 on 25/08/2017.
@@ -24,11 +25,11 @@ class LocationDatabaseHandler(context: Context):
         onCreate(db)
     }
 
-    fun createLocation(location: Location) {
+    fun createLocation(city: String) {
         val db: SQLiteDatabase = writableDatabase
         val values :ContentValues = ContentValues()
 
-        values.put(KEY_NAME, location.city)
+        values.put(KEY_NAME, city)
         db.insert(TABLE_NAME, null, values)
         db.close()
     }

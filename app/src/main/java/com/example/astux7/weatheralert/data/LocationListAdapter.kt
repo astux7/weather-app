@@ -1,5 +1,6 @@
 package com.example.astux7.weatheralert.data
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
@@ -9,7 +10,9 @@ import android.view.ViewGroup
 import android.widget.*
 import com.example.astux7.weatheralert.R
 import com.example.astux7.weatheralert.activity.AddLocation
+import com.example.astux7.weatheralert.model.DEGREE
 import com.example.astux7.weatheralert.model.WindForecast
+import java.util.*
 
 /**
  * Created by astux7 on 29/08/2017.
@@ -40,10 +43,11 @@ class LocationListAdapter(private val list: ArrayList<WindForecast>,
         private val todayWindDir = itemView.findViewById<TextView>(R.id.tvTodayDirection) as TextView
         private val deleteButton = itemView.findViewById<Button>(R.id.deleteButton) as Button
 
+        @SuppressLint("SetTextI18n")
         fun bindItem(forecast: WindForecast){
-            favLocation.text = forecast.location!!.city
-            todayWindSpeed.text = forecast.formatSpeed()
-            todayWindDir.text = forecast.formatDirection()
+            favLocation.text = forecast.location.city
+            todayWindSpeed.text = "${forecast.speed.toString()} m/s"
+            todayWindDir.text = "${forecast.direction.toString()} $DEGREE"
 
             deleteButton.setOnClickListener(this) //register button
         }
@@ -54,10 +58,10 @@ class LocationListAdapter(private val list: ArrayList<WindForecast>,
 
             when(view!!.id) {
                 deleteButton.id -> {
-                    deleteLocation(favLocation!!.id!!)
+                    deleteLocation(favLocation!!.id!!);
                     itemList.removeAt(adapterPosition)
-                    if(list.size > 0) {
-                        Toast.makeText(itemContext, favLocation.city + " deleted", Toast.LENGTH_LONG).show()
+                    if (list.size > 0) {
+                        Toast.makeText(itemContext, "${favLocation.city} deleted", Toast.LENGTH_LONG).show()
                         notifyItemRemoved(adapterPosition)
                     } else {
                         context.startActivity(Intent(context, AddLocation::class.java))

@@ -12,40 +12,42 @@ import kotlinx.android.synthetic.main.activity_current_forecast.*
 import retrofit2.Call
 import retrofit2.Callback
 
-
-
 class CurrentForecast : AppCompatActivity() {
     var dbHandler: LocationDatabaseHandler? = null
-    var location: Location? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_current_forecast)
 
         val city: String = intent.extras!!.get("Location").toString()
-        getForecast(city)
+        getForecastFor(city)
 
         buttonAddToFav.setOnClickListener {
-            dbHandler = LocationDatabaseHandler(this)
-            saveToDb(city)
-            Toast.makeText(this, city + " saved", Toast.LENGTH_LONG).show()
-            startActivity(Intent(this, FavLocations::class.java))
-            finish()
+            addToFavourite(city)
         }
 
         backButton.setOnClickListener {
-            startActivity(Intent(this, FavLocations::class.java))
-            finish()
+            goToFavLocation()
         }
     }
 
-    private fun saveToDb(city: String) {
-        location = Location()
-        location?.city = city
-        dbHandler!!.createLocation(location!!)
+    private fun addToFavourite(city: String) {
+        saveToDb(city)
+        Toast.makeText(this, "$city saved", Toast.LENGTH_LONG).show()
+        goToFavLocation()
     }
 
-    private fun getForecast(city: String) {
+    private fun goToFavLocation() {
+        startActivity(Intent(this, FavLocations::class.java))
+        finish()
+    }
+
+    private fun saveToDb(city: String) {
+        dbHandler = LocationDatabaseHandler(this)
+        dbHandler!!.createLocation(city)
+    }
+
+    private fun getForecastFor(city: String) {
         val network = ForecastNetworkClient(applicationContext)
         val call = network.getForecastBy(city)
 
@@ -79,8 +81,8 @@ class CurrentForecast : AppCompatActivity() {
     private fun presentData(wind: Wind, city: String){
         tvLocationName.text = city
         with(wind) {
-            tvSpeed.text = speed.toString()
-            tvDirection.text = deg.toString()
+            tvSpeed.text = "${speed.toString()} m/s"
+            tvDirection.text = "${deg.toString()} $DEGREE"
         }
     }
 }
