@@ -32,14 +32,16 @@
 
 ### Testing
 
-- Tried to unit test [see here PR](https://github.com/astux7/weather-app/pull/8/files) database handler class [by source](https://medium.com/@elye.project/android-sqlite-database-unit-testing-is-easy-a09994701162) and could not finished because:
+- Start testing adapter (only 1 from 3 test passes) , PR --> https://github.com/astux7/weather-app/pull/9/files (have not finished yet)
+
+- Tried to do unit test [see here PR](https://github.com/astux7/weather-app/pull/8/files) database handler class [by source](https://medium.com/@elye.project/android-sqlite-database-unit-testing-is-easy-a09994701162) and could not finished because:
    + failed to import right version of robolectic to run `@RunWith(RobolectricGradleTestRunner::class)`
    + could not fixed the probably related issue with android studio [here](https://github.com/robolectric/robolectric/wiki/Running-tests-in-Android-Studio)
    + testing other way got error `Method getWritableDatabase in android.database.sqlite.SQLiteOpenHelper not mocked` and could not find the way to fix it yet
 
 
 ### Running app
-
+Android studio 
 
 ### Future
 - Fix the [issues](https://github.com/astux7/weather-app/issues)
