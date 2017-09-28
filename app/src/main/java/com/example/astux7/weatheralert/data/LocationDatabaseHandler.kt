@@ -25,6 +25,11 @@ class LocationDatabaseHandler(context: Context):
         onCreate(db)
     }
 
+    fun clearDbAndRecreate() {
+        writableDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
+        onCreate(writableDatabase)
+    }
+
     fun createLocation(city: String) {
         val db: SQLiteDatabase = writableDatabase
         val values :ContentValues = ContentValues()
