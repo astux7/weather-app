@@ -15,7 +15,7 @@ import retrofit2.Call
 import retrofit2.Callback
 
 class CurrentForecast : AppCompatActivity() {
-    var dbHandler: LocationDatabaseHandler? = null
+    var dbHandler: LocationDatabaseHandler = LocationDatabaseHandler(this)
     val handler = Handler()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,8 +47,7 @@ class CurrentForecast : AppCompatActivity() {
     }
 
     private fun saveToDb(city: String) {
-        dbHandler = LocationDatabaseHandler(this)
-        dbHandler!!.createLocation(city)
+        dbHandler.createLocation(city)
     }
 
     private fun getForecastFor(city: String) {
@@ -94,8 +93,8 @@ class CurrentForecast : AppCompatActivity() {
     private fun presentData(wind: Wind, city: String){
         tvLocationName.text = city
         with(wind) {
-            tvSpeed.text = "${speed.toString()} m/s"
-            tvDirection.text = "${deg.toString()} $DEGREE"
+            tvSpeed.text = "$speed m/s"
+            tvDirection.text = "$deg $DEGREE"
         }
     }
 }

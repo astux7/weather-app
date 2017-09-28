@@ -13,7 +13,7 @@ import java.util.*
  */
 
 class LocationDatabaseHandler(context: Context):
-        SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+        SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) , SqlStuff{
     override fun onCreate(db: SQLiteDatabase?) {
         val CREATE_LOCATION_TABLE = "CREATE TABLE " + TABLE_NAME + "(" +
                 KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT)"
@@ -34,7 +34,7 @@ class LocationDatabaseHandler(context: Context):
         db.close()
     }
 
-    fun readLocations(): ArrayList<Location> {
+    override fun readLocations(): ArrayList<Location> {
         val db: SQLiteDatabase = readableDatabase
         val list: ArrayList<Location> = ArrayList()
         val selectAll = "SELECT * FROM " + TABLE_NAME
@@ -64,4 +64,8 @@ class LocationDatabaseHandler(context: Context):
         cursor.close()
         return listCount
     }
+}
+
+interface SqlStuff{
+    fun readLocations(): ArrayList<Location>
 }

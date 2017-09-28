@@ -50,8 +50,10 @@ class LocationListAdapterTest {
     @Mock
     lateinit var mockParent: ViewGroup
 
-    @Mock
-    lateinit var mockInflator: LayoutInflater
+//    @Mock
+//    lateinit var mockInflator: LayoutInflater
+
+
 
     lateinit var holder: ViewHolder
 
@@ -82,10 +84,11 @@ class LocationListAdapterTest {
 
     @Test
     fun test_on_create_view_holder() {
-//        adapter.setMockView(mockView)
+        adapter.setMockView(mockView)
 //        adapter.setMockInflater(mockInflator)
 //        val viewHolder = adapter.onCreateViewHolder(mockParent, 0)
 //        assertEquals(mockView, viewHolder.itemView)
+        assertEquals(adapter.onCreateViewHolder(FrameLayout(mockContext), 0).javaClass,holder)
     }
 
     fun makeLocation(city: String) :Location {
@@ -105,11 +108,16 @@ class LocationListAdapterTest {
 
 
         private var _mockView: View = View(context)
+       // private var _mockView: Context = context
        // private lateinit var _mockInf: LayoutInflater(mockContext)
 
         fun setMockView(mockView: View) {
             this._mockView = mockView
         }
+
+//        fun setMockContext(mockContext: Context) {
+//            this._mockContext = mockContext
+//        }
 
 
     }

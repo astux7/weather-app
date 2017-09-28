@@ -20,12 +20,11 @@ import retrofit2.Call
 import retrofit2.Callback
 
 class FavLocations : AppCompatActivity() {
-    var dbHandler: LocationDatabaseHandler? = null
-    val handler = Handler()
-    private var adapter: LocationListAdapter? = null
-    private var windForecastList: ArrayList<WindForecast>? = null
-    private var favLocationList: ArrayList<Location>? = null
-    private var layoutManager: RecyclerView.LayoutManager? = null
+
+    private val dbHandler: LocationDatabaseHandler by lazy { LocationDatabaseHandler(applicationContext) }
+    private val handler = Handler()
+    private var adapter = LocationListAdapter(applicationContext)
+    private var favLocationList = mutableListOf<Location>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,19 +36,20 @@ class FavLocations : AppCompatActivity() {
 
     private fun loadFavLocationForecast() {
         // TODO replace deprecated dialog
-        val dialog= ProgressDialog(this)
+        val dialog = ProgressDialog(this)
         dialog.setMessage("Please wait...")
         dialog.show()
-        dbHandler = LocationDatabaseHandler(this)
-        if(dbHandler!!.getLocationCount() > 0) {
+
+        if (dbHandler.getLocationCount() > 0) {
             // load locations - and weather
-            favLocationList = dbHandler!!.readLocations()
-            for(location in favLocationList!!.iterator()) {
+            favLocationList = dbHandler.readLocations()
+            favLocationList.forEach { location ->
                 getForecast(location)
             }
-            handler.postDelayed(Runnable { dialog.dismiss() }, 500)
+
+            handler.postDelayed({ dialog.dismiss() }, 500)
         } else {
-            startActivity(Intent(this, AddLocation::class.java ))
+            startActivity(Intent(this, AddLocation::class.java))
         }
     }
 
@@ -57,31 +57,28 @@ class FavLocations : AppCompatActivity() {
         val network = ForecastNetworkClient(applicationContext)
         val call = network.getForecastBy(location.city!!)
 
-        windForecastList = ArrayList<WindForecast>()
-        layoutManager = LinearLayoutManager(this)
-        adapter = LocationListAdapter(windForecastList!!, this)
+
         // set up list
-        recyclerView.layoutManager = layoutManager
+        recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-        call.enqueue(object: Callback<WeatherForecast> {
-            override fun onResponse(call: Call<WeatherForecast>?,
-                                    response: retrofit2.Response<WeatherForecast>?) {
-                if(response != null) {
-                    val windForecast: WeatherForecast = response.body()!!
+        call.enqueue(object : Callback<WeatherForecast> {
+            override fun onResponse(call: Call<WeatherForecast>,
+                                    response: retrofit2.Response<WeatherForecast>) {
+                response.body()?.let { windForecast ->
                     val wind = windForecast.wind
 
-                    windForecastList!!.add(WindForecast(location, wind.speed, wind.deg))
-                    adapter!!.notifyDataSetChanged()
+                    adapter.addForecast(WindForecast(location, wind.speed, wind.deg))
                 }
+
             }
 
-            override fun onFailure(call: Call<WeatherForecast>?, t: Throwable?) {
+            override fun onFailure(call: Call<WeatherForecast>, t: Throwable) {
                 Toast.makeText(applicationContext, "Problem getting forecast for city ",
                         Toast.LENGTH_LONG).show()
                 val intent = Intent(applicationContext, AddLocation::class.java)
                 startActivity(intent)
-               // t?.printStackTrace()
+//                 t?.printStackTrace()
             }
 
         })
@@ -94,7 +91,7 @@ class FavLocations : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if(item != null) {
+        if (item != null) {
             when (item.itemId) {
                 R.id.buAddLocation -> {
                     startActivity(Intent(this, AddLocation::class.java))

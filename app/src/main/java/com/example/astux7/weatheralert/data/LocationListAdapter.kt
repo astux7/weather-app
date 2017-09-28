@@ -12,14 +12,17 @@ import com.example.astux7.weatheralert.R
 import com.example.astux7.weatheralert.activity.AddLocation
 import com.example.astux7.weatheralert.model.DEGREE
 import com.example.astux7.weatheralert.model.WindForecast
+import kotlinx.android.synthetic.main.location.view.*
 import java.util.*
 
 /**
  * Created by astux7 on 29/08/2017.
  */
 
-open class LocationListAdapter(private val list: ArrayList<WindForecast>,
-                          private val context: Context): RecyclerView.Adapter<LocationListAdapter.ViewHolder>() {
+open class LocationListAdapter(private val context: Context) : RecyclerView.Adapter<LocationListAdapter.ViewHolder>() {
+
+    val list = mutableListOf<WindForecast>()
+
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         holder?.bindItem(list[position])
     }
@@ -27,6 +30,7 @@ open class LocationListAdapter(private val list: ArrayList<WindForecast>,
     override fun getItemCount(): Int {
         return list.size
     }
+
     // Create actual data view - ticket
     override fun onCreateViewHolder(parent: ViewGroup?, position: Int): ViewHolder {
         // create our view from xml file
@@ -35,30 +39,31 @@ open class LocationListAdapter(private val list: ArrayList<WindForecast>,
     }
 
     // get the actual item when it is created from onCreateView
-    inner class ViewHolder(itemView: View, context: Context, list: ArrayList<WindForecast>) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    inner class ViewHolder(itemView: View, context: Context, list: MutableList<WindForecast>) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
         private val itemContext = context
         private val itemList = list
-        private val favLocation = itemView.findViewById<TextView>(R.id.tvLocationItem) as TextView
-        private val todayWindSpeed = itemView.findViewById<TextView>(R.id.tvTodaySpeed) as TextView
-        private val todayWindDir = itemView.findViewById<TextView>(R.id.tvTodayDirection) as TextView
-        private val deleteButton = itemView.findViewById<Button>(R.id.deleteButton) as Button
+        private val favLocation = itemView.tvLocationItem
+        private val todayWindSpeed = itemView.tvTodaySpeed
+        private val todayWindDir = itemView.tvTodayDirection
+        private val deleteButton = itemView.deleteButton
 
-        @SuppressLint("SetTextI18n")
-        fun bindItem(forecast: WindForecast){
+        fun bindItem(forecast: WindForecast) {
             favLocation.text = forecast.location.city
-            todayWindSpeed.text = "${forecast.speed.toString()} m/s"
-            todayWindDir.text = "${forecast.direction.toString()} $DEGREE"
+            todayWindSpeed.text = "${forecast.speed} m/s"
+            todayWindDir.text = "${forecast.direction} $DEGREE"
 
             deleteButton.setOnClickListener(this) //register button
         }
 
-        override fun onClick(view: View?) {
+        override fun onClick(view: View) {
             val itemPosition: Int = adapterPosition
             val favLocation = itemList[itemPosition].location
 
-            when(view!!.id) {
+            when (view.id) {
                 deleteButton.id -> {
-                    deleteLocation(favLocation!!.id!!);
+                    favLocation.id?.let {
+                        deleteLocation(it);
+                    }
                     itemList.removeAt(adapterPosition)
                     if (list.size > 0) {
                         Toast.makeText(itemContext, "${favLocation.city} deleted", Toast.LENGTH_LONG).show()
@@ -74,5 +79,10 @@ open class LocationListAdapter(private val list: ArrayList<WindForecast>,
             val db = LocationDatabaseHandler(itemContext)
             db.deleteLocation(id)
         }
+    }
+
+    fun addForecast(windForecast: WindForecast) {
+        list.add(windForecast)
+        notifyDataSetChanged()
     }
 }
