@@ -32,7 +32,7 @@
 
 ### Testing
 
-- Start testing adapter (only 1 from 3 test passes) , PR --> https://github.com/astux7/weather-app/pull/9/files (have not finished yet)
+- Started testing adapter (only 1 from 3 test passes) , PR --> https://github.com/astux7/weather-app/pull/9/files (have not finished yet)
 
 - Tried to do unit test [see here PR](https://github.com/astux7/weather-app/pull/8/files) database handler class [by source](https://medium.com/@elye.project/android-sqlite-database-unit-testing-is-easy-a09994701162) and could not finished because:
    + failed to import right version of robolectic to run `@RunWith(RobolectricGradleTestRunner::class)`
@@ -45,5 +45,5 @@ Android studio
 
 ### Future
 - Fix the [issues](https://github.com/astux7/weather-app/issues)
-- Refactor code for better testing experience (now is too big activies) 
+- Refactor code for better testing experience (now is too big activities) 
 
