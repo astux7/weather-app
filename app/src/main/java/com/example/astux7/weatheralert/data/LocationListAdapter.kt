@@ -18,7 +18,7 @@ import java.util.*
  * Created by astux7 on 29/08/2017.
  */
 
-class LocationListAdapter(private val list: ArrayList<WindForecast>,
+open class LocationListAdapter(private val list: ArrayList<WindForecast>,
                           private val context: Context): RecyclerView.Adapter<LocationListAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         holder?.bindItem(list[position])
