@@ -1,6 +1,6 @@
-#Weather app [APK FILE](https://github.com/astux7/weather-app/tree/master/app/release)
-
-#Idea of the App
+# Weather app 
+[APK FILE](https://github.com/astux7/weather-app/tree/master/app/release)
+### Idea of the App
 <br /><br />
 ***Enter city page***<br />
 <img src="https://github.com/astux7/weather-app/blob/master/pic/Screenshot_20170928-014322.png" height="25%" width="25%"/>
@@ -41,7 +41,7 @@
 ### Running app
 
 
-###Future
+### Future
 - Fix the [issues](https://github.com/astux7/weather-app/issues)
 - Refactor code for better testing experience (now is too big activies) 
 
